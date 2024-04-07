@@ -10,6 +10,7 @@ import { ProductsService } from '../../services/products.service';
 export class AllProductsComponent {
   products: Product[] = [];
   categories: string[] = [];
+  searchValue: string = '';
   loading: boolean = false;
   cartProducts: any[] = [];
 
@@ -17,6 +18,7 @@ export class AllProductsComponent {
 
   ngOnInit(): void {
     this.getProducts();
+    this.getCategories();
   }
 
   getProducts() {
@@ -28,10 +30,6 @@ export class AllProductsComponent {
       },
       error: (error) => {
         console.error(error.message);
-        this.loading = false;
-      },
-      complete: () => {
-        console.info('Completed fetching products');
         this.loading = false;
       },
     });
@@ -50,4 +48,46 @@ export class AllProductsComponent {
       },
     });
   }
+
+  checkProduct(name: string): void {
+    this.service.getProductsByCategory(name).subscribe({
+      next: (res: any) => {
+        setTimeout(() => {
+          this.products = res;
+        }, 700);
+      },
+      error: (err) => {
+        console.error(err);
+        this.products = [];
+      },
+    });
+  }
+
+  public onSearchChange(): void {
+    if (this.searchValue === '') {
+      this.getProducts();
+    } else {
+      this.checkProduct(this.searchValue);
+    }
+  }
+
+  // filterCategory(event: any) {
+  //   let value = event.target.value;
+  //   console.log(value);
+  //   value === 'all' ? this.getProducts() : this.getProductsCategory(value);
+  // }
+  // getProductsCategory(keyword: string) {
+  //   this.loading = true;
+  //   this.service.getProductsByCategory(keyword).subscribe({
+  //     next: (res: any) => {
+  //       // Update Products array
+  //       this.products = res;
+  //       this.loading = false;
+  //     },
+  //     error: (error) => {
+  //       console.error(error.message);
+  //       this.loading = false;
+  //     },
+  //   });
+  // }
 }
