@@ -1,24 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, NgZone } from '@angular/core';
 import { Product } from '../../models/product';
 import { ProductsService } from '../../services/products.service';
 
 @Component({
   selector: 'app-all-products',
   templateUrl: './all-products.component.html',
-  styleUrl: './all-products.component.scss',
 })
 export class AllProductsComponent {
   products: Product[] = [];
   categories: string[] = [];
   searchValue: string = '';
-  loading: boolean = false;
   cartProducts: any[] = [];
+  loading: boolean = false;
+  isMenuOpen: boolean = false;
 
-  constructor(private service: ProductsService) {}
+  constructor(private ngZone: NgZone, private service: ProductsService) {
+    this.onResize();
+  }
 
   ngOnInit(): void {
     this.getProducts();
     this.getCategories();
+  }
+
+  public toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  @HostListener('window:resize')
+  private onResize(): void {
+    this.ngZone.run(() => {
+      if (typeof window !== 'undefined') {
+        this.isMenuOpen = window.innerWidth >= 768;
+      }
+    });
   }
 
   getProducts() {
@@ -49,12 +64,11 @@ export class AllProductsComponent {
     });
   }
 
-  checkProduct(name: string): void {
+  checkProductCategory(name: string): void {
     this.service.getProductsByCategory(name).subscribe({
       next: (res: any) => {
-        setTimeout(() => {
-          this.products = res;
-        }, 700);
+        setTimeout(() => {}, 700);
+        this.products = res;
       },
       error: (err) => {
         console.error(err);
@@ -67,7 +81,7 @@ export class AllProductsComponent {
     if (this.searchValue === '') {
       this.getProducts();
     } else {
-      this.checkProduct(this.searchValue);
+      this.checkProductCategory(this.searchValue);
     }
   }
 

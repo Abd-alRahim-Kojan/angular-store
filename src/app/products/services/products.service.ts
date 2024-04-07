@@ -1,21 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  private searchValue = new BehaviorSubject<string>('');
-
-  // Other components can subscribe to this Observable to get updates
-  currentSearchValue = this.searchValue.asObservable();
-
-  updateSearchValue(value: string) {
-    this.searchValue.next(value);
-  }
-  
   constructor(private http: HttpClient) {}
 
   getAllProducts() {
@@ -28,6 +19,10 @@ export class ProductsService {
 
   getProductsByCategory(keyword: string) {
     return this.http.get(environment.baseApi + 'products/category/' + keyword);
+  }
+
+  getProductByName(name: string): Observable<any> {
+    return this.http.get(environment.baseApi + '/products?name=' + name);
   }
 
   // getProductById(id: any) {
