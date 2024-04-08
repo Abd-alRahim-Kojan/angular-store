@@ -9,11 +9,9 @@ import { ProductsService } from '../../services/products.service';
 export class AllProductsComponent {
   products: Product[] = [];
   categories: string[] = [];
-  searchValue: string = '';
   cartProducts: any[] = [];
   loading: boolean = false;
   isMenuOpen: boolean = false;
-  
 
   constructor(private ngZone: NgZone, private service: ProductsService) {
     this.onResize();
@@ -80,34 +78,49 @@ export class AllProductsComponent {
     });
   }
 
-  public onSearchChange(): void {
+  handleSearchChange(searchValue: string) {
     this.loading = true;
-    if (this.searchValue === '') {
+    if (searchValue === '') {
       this.getProducts();
-      this.loading = false;
     } else {
-      this.checkProductCategory(this.searchValue);
-      this.loading = false;
+      this.checkProductCategory(searchValue);
+    }
+    this.loading = false;
+  }
+
+  addToCart(event: any) {
+    if ('cart' in localStorage) {
+      this.cartProducts = JSON.parse(localStorage.getItem('cart')!);
+      let exist = this.cartProducts.find(
+        (item) => item.item.id === event.item.id
+      );
+      if (exist) {
+        alert('Product is already in your cart');
+      } else {
+        this.cartProducts.push(event);
+        localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+      }
+    } else {
+      this.cartProducts.push(event);
+      localStorage.setItem('cart', JSON.stringify(this.cartProducts));
     }
   }
 
-  // filterCategory(event: any) {
-  //   let value = event.target.value;
-  //   console.log(value);
-  //   value === 'all' ? this.getProducts() : this.getProductsCategory(value);
-  // }
-  // getProductsCategory(keyword: string) {
-  //   this.loading = true;
-  //   this.service.getProductsByCategory(keyword).subscribe({
-  //     next: (res: any) => {
-  //       // Update Products array
-  //       this.products = res;
-  //       this.loading = false;
-  //     },
-  //     error: (error) => {
-  //       console.error(error.message);
-  //       this.loading = false;
-  //     },
-  //   });
-  // }
+  removeFromCart(event: any) {
+    if ('cart' in localStorage) {
+      this.cartProducts = JSON.parse(localStorage.getItem('cart')!);
+      let exist = this.cartProducts.find(
+        (item) => item.item.id === event.item.id
+      );
+      if (exist) {
+        this.cartProducts = this.cartProducts.filter(
+          (product) => product.item.id !== event.item.id
+        );
+        localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+        alert('Product removed!');
+      } else {
+        alert('Product is not in your cart');
+      }
+    }
+  }
 }

@@ -1,0 +1,57 @@
+<div class="min-h-96 lg:min-h-[32rem] flex flex-col justify-between">
+  <a
+    href="javascript:;"
+    class="mx-auto sm:mr-0 group cursor-pointer lg:mx-auto bg-white transition-all duration-500"
+  >
+    <img
+      src="{{ product.image }}"
+      alt="product-image"
+      class="w-full aspect-square"
+    />
+    <div class="mt-5">
+      <div class="flex items-start justify-between">
+        <h6
+          class="max-h-24 overflow-hidden font-semibold text-xl leading-8 text-black transition-all duration-500 group-hover:text-indigo-600"
+        >
+          {{ product.title }}
+        </h6>
+        <h6 class="font-semibold text-xl leading-8 text-indigo-600">
+          {{ "$" + product.price }}
+        </h6>
+      </div>
+      <p class="my-4 font-normal text-sm leading-6 text-gray-500">
+        {{ product.category }}
+      </p>
+    </div>
+  </a>
+  <div class="flex items-center justify-between">
+    <button
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-3 py-2.5 text-center inline-flex items-center me-2"
+      *ngIf="!addButton"
+      (click)="addButton = true"
+    >
+      <i class="fa-solid fa-cart-shopping pe-2"></i>
+      Add to cart
+    </button>
+    <div class="flex w-1/2" *ngIf="addButton">
+      <input
+        type="number"
+        class="me-2 p-2 focus:outline-gray-400"
+        [(ngModel)]="amount"
+      />
+      <button
+        class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-3 py-2.5 text-center inline-flex items-center me-2"
+        (click)="add(); addButton = false"
+      >
+        Add
+      </button>
+    </div>
+    <button
+      class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center inline-flex items-center me-2"
+      *ngIf="!addButton"
+      (click)="remove()"
+    >
+      Remove from cart
+    </button>
+  </div>
+</div>
