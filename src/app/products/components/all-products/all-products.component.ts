@@ -13,6 +13,7 @@ export class AllProductsComponent {
   cartProducts: any[] = [];
   loading: boolean = false;
   isMenuOpen: boolean = false;
+  
 
   constructor(private ngZone: NgZone, private service: ProductsService) {
     this.onResize();
@@ -65,12 +66,14 @@ export class AllProductsComponent {
   }
 
   checkProductCategory(name: string): void {
+    this.loading = true;
     this.service.getProductsByCategory(name).subscribe({
       next: (res: any) => {
-        setTimeout(() => {}, 700);
+        this.loading = false;
         this.products = res;
       },
       error: (err) => {
+        this.loading = false;
         console.error(err);
         this.products = [];
       },
@@ -78,10 +81,13 @@ export class AllProductsComponent {
   }
 
   public onSearchChange(): void {
+    this.loading = true;
     if (this.searchValue === '') {
       this.getProducts();
+      this.loading = false;
     } else {
       this.checkProductCategory(this.searchValue);
+      this.loading = false;
     }
   }
 
