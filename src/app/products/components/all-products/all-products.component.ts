@@ -1,6 +1,7 @@
-import { Component, HostListener, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { Product } from '../../models/product';
 import { ProductsService } from '../../services/products.service';
+import { CartsService } from '../../../carts/services/carts.service';
 
 @Component({
   selector: 'app-all-products',
@@ -13,26 +14,14 @@ export class AllProductsComponent {
   loading: boolean = false;
   isMenuOpen: boolean = false;
 
-  constructor(private ngZone: NgZone, private service: ProductsService) {
-    this.onResize();
-  }
+  constructor(
+    private service: ProductsService,
+    private cartService: CartsService
+  ) {}
 
   ngOnInit(): void {
     this.getProducts();
     this.getCategories();
-  }
-
-  public toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
-
-  @HostListener('window:resize')
-  private onResize(): void {
-    this.ngZone.run(() => {
-      if (typeof window !== 'undefined') {
-        this.isMenuOpen = window.innerWidth >= 768;
-      }
-    });
   }
 
   getProducts() {
@@ -99,10 +88,12 @@ export class AllProductsComponent {
       } else {
         this.cartProducts.push(event);
         localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+        this.cartService.incrementCount();
       }
     } else {
       this.cartProducts.push(event);
       localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+      this.cartService.incrementCount();
     }
   }
 
@@ -117,6 +108,7 @@ export class AllProductsComponent {
           (product) => product.item.id !== event.item.id
         );
         localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+        this.cartService.decrementCount();
         alert('Product removed!');
       } else {
         alert('Product is not in your cart');

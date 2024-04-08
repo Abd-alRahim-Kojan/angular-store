@@ -25,9 +25,9 @@ export class ProductsService {
     return this.http.get(environment.baseApi + '/products?name=' + name);
   }
 
-  // getProductById(id: any) {
-  //   return this.http.get(environment.baseApi + 'products/' + id);
-  // }
+  getProductById(id: any) {
+    return this.http.get(environment.baseApi + 'products/' + id);
+  }
 
   // getProductByNameOrCategory(nameOrCategory: string): Observable<any> {
   //   // Implement the API call here to get the product by name or category
