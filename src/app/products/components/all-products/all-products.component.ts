@@ -13,6 +13,7 @@ export class AllProductsComponent {
   cartProducts: any[] = [];
   loading: boolean = false;
   isMenuOpen: boolean = false;
+  p: number = 1;
 
   constructor(
     private service: ProductsService,

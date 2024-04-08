@@ -6,9 +6,20 @@ import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ProductComponent } from './components/product/product.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
-  declarations: [AllProductsComponent, ProductDetailsComponent, ProductComponent],
-  imports: [CommonModule, SharedModule, FormsModule, RouterModule],
+  declarations: [
+    AllProductsComponent,
+    ProductDetailsComponent,
+    ProductComponent,
+  ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    FormsModule,
+    RouterModule,
+    NgxPaginationModule,
+  ],
 })
 export class ProductsModule {}

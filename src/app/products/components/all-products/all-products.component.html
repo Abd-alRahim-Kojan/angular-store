@@ -13,7 +13,13 @@
             *ngIf="!loading"
             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20"
           >
-            <div *ngFor="let product of products">
+            <div
+              *ngFor="
+                let product of products
+                  | paginate : { itemsPerPage: 8, currentPage: p }
+              "
+              class="flex flex-col"
+            >
               <app-product
                 [product]="product"
                 (addItem)="addToCart($event)"
@@ -21,12 +27,17 @@
               ></app-product>
             </div>
           </div>
+          <div class="mt-14">
+            <pagination-controls
+              (pageChange)="p = $event"
+            ></pagination-controls>
+          </div>
           <div *ngIf="!loading">
             <div
               *ngIf="products.length === 0"
               class="text-center text-3xl font-bold my-40"
             >
-              <p>No prouducts Or category found :(</p>
+              <p>No category found :(</p>
             </div>
           </div>
           <div class="text-center w-full" *ngIf="loading">
