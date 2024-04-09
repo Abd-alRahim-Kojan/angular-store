@@ -1,4 +1,4 @@
-### Demo: https://github.com/Abd-alRahim-Kojan/angular-store
+### Demo: https://abd-alrahim-kojan.github.io/angular-store/
 
 # AngularStore
 
