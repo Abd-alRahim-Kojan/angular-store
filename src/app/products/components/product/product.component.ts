@@ -12,7 +12,7 @@ export class ProductComponent {
   @Output() removeItem = new EventEmitter();
   ngOnInit(): void {}
   addButton: boolean = false;
-  amount: number = 0;
+  amount: number = 1;
 
   add() {
     this.addItem.emit({ item: this.product, quantity: this.amount });

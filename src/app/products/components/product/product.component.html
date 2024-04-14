@@ -36,6 +36,7 @@
     <div class="flex w-1/2" *ngIf="addButton">
       <input
         type="number"
+        min="1"
         class="me-2 p-2 focus:outline-gray-400"
         [(ngModel)]="amount"
       />

@@ -22,7 +22,6 @@ export class AllProductsComponent {
 
   ngOnInit(): void {
     this.getProducts();
-    this.getCategories();
   }
 
   getProducts() {
@@ -39,43 +38,20 @@ export class AllProductsComponent {
     });
   }
 
-  getCategories() {
-    this.loading = true;
-    this.service.getAllCategories().subscribe({
-      next: (res: any) => {
-        this.categories = res;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error(error.message);
-        this.loading = false;
-      },
-    });
-  }
-
-  checkProductCategory(name: string): void {
-    this.loading = true;
-    this.service.getProductsByCategory(name).subscribe({
-      next: (res: any) => {
-        this.loading = false;
-        this.products = res;
-      },
-      error: (err) => {
-        this.loading = false;
-        console.error(err);
-        this.products = [];
-      },
-    });
-  }
-
   handleSearchChange(searchValue: string) {
     this.loading = true;
     if (searchValue === '') {
       this.getProducts();
+      this.loading = false;
     } else {
-      this.checkProductCategory(searchValue);
+      const filteredProducts = this.products.filter(
+        (product) =>
+          product.title.toLowerCase().includes(searchValue.toLowerCase()) ||
+          product.category.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      this.products = filteredProducts;
+      this.loading = false;
     }
-    this.loading = false;
   }
 
   addToCart(event: any) {
